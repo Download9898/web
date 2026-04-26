@@ -82,18 +82,6 @@ public class ProductService {
     }
 
     @Transactional
-    public Image getImageById(Long id) {
-        return imageRepository.findById(id).orElse(null);
-    }
-
-    @Transactional
-    public List<Product> getUserProducts(Principal principal) {
-        User user = getUserByPrincipal(principal);
-        return productRepository.findByUser(user);
-    }
-
-
-    @Transactional
     public ResponseEntity<byte[]> getImageResponse(Long id) {
         Image image = imageRepository.findById(id).orElse(null);
         if (image == null) return ResponseEntity.notFound().build();

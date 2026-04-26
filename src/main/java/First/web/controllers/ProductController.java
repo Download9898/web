@@ -1,6 +1,6 @@
 package First.web.controllers;
 
-import First.web.models.Image;
+
 import First.web.models.Product;
 import First.web.models.User;
 import First.web.services.ProductService;
@@ -16,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Base64;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Controller
 @RequiredArgsConstructor
