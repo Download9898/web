@@ -5,7 +5,6 @@ import First.web.models.User;
 import First.web.models.enums.Role;
 import First.web.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.Banner;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

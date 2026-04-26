@@ -2,17 +2,13 @@ package First.web.controllers;
 
 import First.web.models.User;
 import First.web.services.UserService;
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.naming.ldap.PagedResultsControl;
 import java.security.Principal;
 
 @Controller

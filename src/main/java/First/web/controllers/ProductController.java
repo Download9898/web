@@ -34,8 +34,6 @@ public class ProductController {
         return "products";
     }
 
-
-
     @GetMapping("/product/{id}")
     public String productInfo(@PathVariable Long id, Model model, Principal principal) {
         Product product = productService.getProductById(id);
@@ -55,20 +53,6 @@ public class ProductController {
         return "my-products";
     }
 
-//    @GetMapping("/product/{id}") //старая версия
-//    public String productInfo(@PathVariable Long id, Model model){
-//        Product product = productService.getProductById(id);
-//        model.addAttribute("product",product);
-//
-//        List<String> strA = product.getImages().stream().map(s ->{
-//            return Base64.getEncoder().encodeToString(s.getBytes());
-//        }).collect(Collectors.toList());
-//        model.addAttribute("images", strA);
-//
-//        //model.addAttribute("images",product.getImages());
-//        return "product-info";
-//    }
-
     @PostMapping("/product/create")
     public String createProduct(@RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2,
                                 @RequestParam("file3") MultipartFile file3, Product product, Principal principal) throws IOException {
@@ -80,14 +64,6 @@ public class ProductController {
         productService.deleteProduct(id);
         return "redirect:/my/products";
     }
-
-//    @GetMapping("/images/{id}") //старая версия
-//    public ResponseEntity<?> getImage(@PathVariable Long id) {
-//        Image image = productService.getImageById(id);
-//        return ResponseEntity.ok()
-//                .header("Content-Type", image.getContentType())
-//                .body(image.getBytes());
-//    }
 
     @GetMapping("/images/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
