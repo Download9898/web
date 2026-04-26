@@ -18,12 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 //import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-
-
+import java.util.*;
 
 
 @Entity
@@ -51,6 +46,8 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    private List<Product> products = new ArrayList<>();
     private LocalDateTime dateOfCreated;
 
     @PrePersist
@@ -58,7 +55,9 @@ public class User implements UserDetails {
         dateOfCreated = LocalDateTime.now();
     }
 
-    //security
+//    security
+
+    public boolean isAdmin(){return roles.contains(Role.ROLE_ADMIN);}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
