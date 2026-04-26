@@ -25,8 +25,8 @@ public class Image {
     private String contentType;
     @Column(name = "isPreviewImage")
     private boolean isPreviewImage;
-    //@Column(columnDefinition = "LONGBLOB")
     @Lob //в бд данных будет хранить в типе longblob
+    //@Column(columnDefinition = "bytea")
     private byte[] bytes;
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Product product;

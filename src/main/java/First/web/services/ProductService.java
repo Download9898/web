@@ -3,8 +3,11 @@ package First.web.services;
 import First.web.models.Image;
 import First.web.models.Product;
 import First.web.models.User;
+import First.web.repositories.ImageRepository;
 import First.web.repositories.ProductRepository;
 import First.web.repositories.UserRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
@@ -16,18 +19,21 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
     public List<Product> listProducts(String title) {
         if(title!=null) return productRepository.findByTitle(title);
         return productRepository.findAll();
     }
 
+    @Transactional
     public void saveProduct(Principal principal, Product product, MultipartFile file1, MultipartFile file2, MultipartFile file3 ) throws IOException {
         product.setUser(getUserByPrincipal(principal));
         Image image1;
@@ -51,7 +57,7 @@ public class ProductService {
         log.info("Saving new Product. Title: {}; Author email: {}", product.getTitle(),product.getUser().getEmail());
         Product productFromDb = productRepository.save(product);
         productFromDb.setPreviewImageId(productFromDb.getImages().get(0).getId());
-        productRepository.save(product);
+        productRepository.save(productFromDb);
     }
 
     public User getUserByPrincipal(Principal principal) {
@@ -75,5 +81,26 @@ public class ProductService {
 
     public Product getProductById(Long id) {
         return productRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public Image getImageById(Long id) {
+        return imageRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public List<Product> getUserProducts(Principal principal) {
+        User user = getUserByPrincipal(principal);
+        return productRepository.findByUser(user);
+    }
+
+
+    @Transactional
+    public ResponseEntity<byte[]> getImageResponse(Long id) {
+        Image image = imageRepository.findById(id).orElse(null);
+        if (image == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok()
+                .header("Content-Type", image.getContentType())
+                .body(image.getBytes()); // ← всё внутри одной транзакции
     }
 }

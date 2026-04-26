@@ -4,7 +4,9 @@ import First.web.services.CustomUserDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,13 +29,14 @@ public class SecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/registration").permitAll()
-                        .requestMatchers("/product/**", "/image/**","/user/**")
+                        .requestMatchers("/", "/registration","/images/**").permitAll()
+                        .requestMatchers("/product/**", "/image/**","/user/**","/static/**","/my/products")
                         .hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
@@ -42,36 +45,25 @@ public class SecurityConfig {
     }
 
 
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailService)
-                .passwordEncoder(passwordEncoder());
-    }
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(userDetailService)
+//                .passwordEncoder(passwordEncoder());
+//    }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig,
+                                                       HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(userDetailService)
+                .passwordEncoder(passwordEncoder());
+        return builder.build();
+    }
+
+
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);
     }
 }
-//@Configuration
-//@EnableWebSecurity
-//@RequiredArgsConstructor
-//public class SecurityConfig {
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.authorizeHttpRequests((requests) -> requests
-//                        .requestMatchers("/","/product/", "/images/", "/registration")
-//                        .permitAll().anyRequest().authenticated() ) .
-//                formLogin((form) -> form.loginPage("/login").permitAll() ) .logout((logout) -> logout.permitAll());
-//        return http.build();
-//    }
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(8);
-//    }
-//}

@@ -6,12 +6,14 @@ import First.web.models.enums.Role;
 import First.web.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.StringReader;
 import java.lang.reflect.Array;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,5 +68,10 @@ public class UserService {
             }
         }
         userRepository.save(user);
+    }
+
+    public User getUserByPrincipal(Principal principal) {
+        if (principal == null) return new User();
+        return userRepository.findByEmail(principal.getName());
     }
 }
