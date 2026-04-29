@@ -67,4 +67,5 @@ public class ProductController {
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
         return productService.getImageResponse(id);
     }
+
 }
