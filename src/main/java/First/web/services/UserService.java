@@ -54,9 +54,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-//    public void changeUserRoles(User user, Map<String, String> form) {
-//    }
-
     public void changeUserRoles(User user, Map<String, String> form){
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)

@@ -1,6 +1,9 @@
 <#import "blocks/template.ftlh" as t>
 <@t.template user>
-    `<h1 style="text-align: center">Панель администратора</h1><hr>
+    <h1 style="text-align: center">Панель администратора</h1><hr>
+
+    <a href="/admin/surveys" class="btn btn-light mb-3">📋 Анкеты пользователей</a>
+
     <table class="table table-hover table-dark">
         <tr>
             <th scope="col">Email</th>
@@ -23,11 +26,13 @@
                         <input type="submit" class="btn btn-light" value="Бан">
                     </form>
                 </th>
-                <th><a href="/admin/user/edit/${user.id}">Редактировние</a></th>
+                <th><a href="/admin/user/edit/${user.id}">Редактирование</a></th>
                 <th><a href="/user/${user.id}">Подробная информация</a></th>
             </tr>
         <#else>
-            <h3>Пользователей нет</h3>
+            <tr>
+                <td colspan="7" style="text-align: center">Пользователей нет</td>
+            </tr>
         </#list>
     </table>
 </@t.template>

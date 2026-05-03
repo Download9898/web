@@ -1,31 +1,6 @@
 <#import "blocks/template.ftlh" as t>
 <@t.template user>
-    <h1 style="text-align: center">Поиск товаров</h1><hr>
-    <form method="get" action="/">
-        <div class="form-row">
-            <div class="form-group col-md-2">
-                <label for="searchCity">Город</label>
-                <select id="searchCity" class="form-control">
-                    <option value="">Город не выбран</option>
-                    <option value="Москва">Москва</option>
-                    <option value="Красноярск">Красноярск</option>
-                    <option value="Казань">Казань</option>
-                </select>
-            </div>
-            <div class="form-group col-md-10">
-                <label for="searchWord">Поиск по объявлениям</label>
-                <input type="text" name="searchWord" <#if searchWord??>value="${searchWord}"</#if> class="form-control"
-                       id="searchWord">
-            </div>
-            <button style="width: 100%" type="submit" class="btn btn-dark">Поиск</button>
-        </div>
-    </form>
-    <hr>
-
-    <!-- Многошаговая анкета -->
-    <div style="max-width: 560px; margin: 0 auto 2rem;">
-
-        <h4 style="text-align: center; color: #fff; margin-bottom: 1rem;">Не нашли нужный товар?</h4>
+    <div style="max-width: 560px; margin: 40px auto;">
 
         <!-- Индикатор шагов -->
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
@@ -41,8 +16,8 @@
 
             <!-- Шаг 1 — Категория -->
             <div id="step-1" class="card bg-dark text-white p-4">
-                <h5 style="text-align: center; margin-bottom: 0.5rem;">Какой вид товара вас интересует?</h5>
-                <p style="text-align: center; color: #aaa; margin-bottom: 1.5rem;">Выберите категорию</p>
+                <h4 style="text-align: center; margin-bottom: 0.5rem;">Какой вид товара вас интересует?</h4>
+                <p style="text-align: center; color: #aaa; margin-bottom: 1.5rem;">Выберите одну категорию</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem;">
                     <div class="cat-card" onclick="selectCard(this, 'category', 'Электроника')" style="border: 1px solid #555; border-radius: 8px; padding: 12px 16px; cursor: pointer; color: #fff; text-align: center;">Электроника</div>
                     <div class="cat-card" onclick="selectCard(this, 'category', 'Одежда')" style="border: 1px solid #555; border-radius: 8px; padding: 12px 16px; cursor: pointer; color: #fff; text-align: center;">Одежда</div>
@@ -57,7 +32,7 @@
 
             <!-- Шаг 2 — Цена -->
             <div id="step-2" class="card bg-dark text-white p-4" style="display: none;">
-                <h5 style="text-align: center; margin-bottom: 0.5rem;">Приблизительная цена?</h5>
+                <h4 style="text-align: center; margin-bottom: 0.5rem;">Приблизительная цена?</h4>
                 <p style="text-align: center; color: #aaa; margin-bottom: 1.5rem;">Укажите ваш бюджет</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.5rem;">
                     <div class="price-card" onclick="selectCard(this, 'price', '1000')" style="border: 1px solid #555; border-radius: 8px; padding: 12px 16px; cursor: pointer; color: #fff; text-align: center;">До 1 000 ₽</div>
@@ -74,7 +49,7 @@
 
             <!-- Шаг 3 — Контакты -->
             <div id="step-3" style="display: none; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg, #1a1a2e, #0f3460); padding: 2rem;">
-                <h5 style="text-align: center; color: #fff; margin-bottom: 0.5rem;">Заявка на консультацию</h5>
+                <h4 style="text-align: center; color: #fff; margin-bottom: 0.5rem;">Заявка на консультацию</h4>
                 <p style="text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 1.5rem;">Оставьте контакты — мы свяжемся с вами</p>
                 <div class="form-group">
                     <input type="text" name="nameUser" class="form-control" placeholder="Имя" required
@@ -90,31 +65,12 @@
 
         </form>
     </div>
-    <hr>
-
-    <div class="card-columns">
-        <#list products as product>
-            <a href="/product/${product.id}" class="product-link">
-                <div class="card text-white bg-dark my-3 product">
-                    <img src="/images/${product.previewImageId}" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">${product.title}</h5>
-                        <p class="card-text">${product.price} ₽</p>
-                    </div>
-                    <div class="card-footer">
-                        ${product.city}
-                    </div>
-                </div>
-            </a>
-        <#else>
-            <h1 style="text-align: center">Не найдено</h1>
-        </#list>
-    </div>
 
     <script>
         function nextStep(n) {
             document.querySelectorAll('[id^="step-"]').forEach(s => s.style.display = 'none');
             document.getElementById('step-' + n).style.display = 'block';
+
             for (let i = 1; i <= 3; i++) {
                 const dot = document.getElementById('dot-' + i);
                 dot.style.background = i <= n ? '#fff' : '#555';

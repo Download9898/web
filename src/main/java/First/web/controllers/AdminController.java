@@ -3,8 +3,10 @@ package First.web.controllers;
 
 import First.web.models.User;
 import First.web.models.enums.Role;
+import First.web.services.SurveyService;
 import First.web.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,7 @@ import java.util.Map;
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
     private final UserService userService;
+    private final SurveyService surveyService;
 
     @GetMapping("/admin")
     public String admin(Model model, Principal principal) {
@@ -47,5 +50,13 @@ public class AdminController {
     public String userEdit(@RequestParam("userId") User user, @RequestParam Map<String,String> form){
         userService.changeUserRoles(user,form);
         return "redirect:/admin";
+    }
+
+
+    @GetMapping("/admin/surveys")
+    public String surveys(Model model, Principal principal){
+        model.addAttribute("user", userService.getUserByPrincipal(principal));
+        model.addAttribute("surveys", surveyService.findAll());
+        return "admin-surveys";
     }
 }

@@ -1,6 +1,5 @@
 package First.web.controllers;
 
-
 import First.web.models.Product;
 import First.web.models.User;
 import First.web.services.ProductService;
@@ -43,7 +42,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/my/products") // ← новый маршрут
+    @GetMapping("/my/products")
     public String myProducts(Model model, Principal principal) {
         User user = productService.getUserByPrincipal(principal);
         model.addAttribute("user", user);
