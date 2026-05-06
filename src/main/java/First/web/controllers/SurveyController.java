@@ -33,6 +33,6 @@ public class SurveyController {
     @GetMapping("/survey/thanks")
     public String thanks(Model model, Principal principal){
         model.addAttribute("user",surveyService.getUserByPrincipal(principal));
-        return "survey/thanks";
+        return "survey-thanks";
     }
 }

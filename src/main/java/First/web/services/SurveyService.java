@@ -18,6 +18,7 @@ import java.util.List;
 public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Transactional
     public void saveSurvey(String category, Long price, String phoneUser, String nameUser, Principal principal){
@@ -33,8 +34,21 @@ public class SurveyService {
                 survey.setUser(user);
             }
         }
-        //  survey.setUser(getUserByPrincipal(principal));
         surveyRepository.save(survey);
+
+
+        try {
+            emailService.sendEmail(
+                    "logovo1551@gmail.com",
+                    "Новая анкета на BuySell",
+                    "Имя: " + nameUser + "\n" +
+                            "Телефон: " + phoneUser + "\n" +
+                            "Категория: " + category + "\n" +
+                            "Цена: " + price + " ₽"
+            );
+        } catch (Exception e) {
+            log.error("Ошибка отправки письма: ", e);
+        }
     }
 
     public User getUserByPrincipal(Principal principal) {
