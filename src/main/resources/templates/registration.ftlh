@@ -25,4 +25,48 @@
     <#if errorMessage??>
         <h2 style="color: red">${errorMessage}</h2>
     </#if>
+    <script>
+        const validators = {
+            'name': /^[А-Яа-яЁёA-Za-z\s]{2,50}$/,
+            'email': /^[a-zA-Z0-9._%+\-]+@(gmail\.com|mail\.ru)$/,
+            'phoneNumber': /^(\+7|8)\d{10}$/,
+            'password': /.{6,}/
+        };
+        const errorIds = {
+            'name': 'nameError',
+            'email': 'emailError',
+            'phoneNumber': 'phoneError',
+            'password': 'passwordError'
+        };
+
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            let valid = true;
+            Object.keys(validators).forEach(function(fieldName) {
+                const field = document.querySelector('[name="' + fieldName + '"]');
+                const error = document.getElementById(errorIds[fieldName]);
+                if (!validators[fieldName].test(field.value)) {
+                    field.style.border = '1px solid red';
+                    error.style.display = 'block';
+                    valid = false;
+                } else {
+                    field.style.border = '';
+                    error.style.display = 'none';
+                }
+            });
+            if (!valid) e.preventDefault();
+        });
+
+        Object.keys(validators).forEach(function(fieldName) {
+            document.querySelector('[name="' + fieldName + '"]').addEventListener('input', function() {
+                const error = document.getElementById(errorIds[fieldName]);
+                if (!validators[fieldName].test(this.value)) {
+                    this.style.border = '1px solid red';
+                    error.style.display = 'block';
+                } else {
+                    this.style.border = '';
+                    error.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </@t.template>

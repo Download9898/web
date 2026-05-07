@@ -24,9 +24,26 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public boolean isEmailExists(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
+
     public boolean createUser(User user){
         String email = user.getEmail();
         if(userRepository.findByEmail(email) != null) return false;
+
+        // Валидация email
+        if (!email.matches("^[a-zA-Z0-9._%+\\-]+@(gmail\\.com|mail\\.ru)$")) return false;
+
+        // Валидация телефона
+        if (!user.getPhoneNumber().matches("^(\\+7|8)\\d{10}$")) return false;
+
+        // Валидация имени
+        if (!user.getName().matches("^[А-Яа-яЁёA-Za-z\\s]{2,50}$")) return false;
+
+        // Валидация пароля
+        if (user.getPassword().length() < 6) return false;
+
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(Role.ROLE_USER);

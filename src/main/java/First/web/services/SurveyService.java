@@ -21,12 +21,13 @@ public class SurveyService {
     private final EmailService emailService;
 
     @Transactional
-    public void saveSurvey(String category, Long price, String phoneUser, String nameUser, Principal principal){
+    public void saveSurvey(String category, Long price, String phoneUser, String nameUser,String emailUser, Principal principal){
         Survey survey = new Survey();
         survey.setCategory(category);
         survey.setPrice(price);
         survey.setPhoneUser(phoneUser);
         survey.setNameUser(nameUser);
+        survey.setEmailUser(emailUser);
 
         if(principal!=null){
             User user = userRepository.findByEmail(principal.getName());
@@ -43,6 +44,7 @@ public class SurveyService {
                     "Новая анкета на BuySell",
                     "Имя: " + nameUser + "\n" +
                             "Телефон: " + phoneUser + "\n" +
+                            "Email: " + emailUser + "\n" +
                             "Категория: " + category + "\n" +
                             "Цена: " + price + " ₽"
             );

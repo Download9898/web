@@ -27,6 +27,8 @@ public class Survey {
     private String phoneUser;
     @Column(name = "dateOfCreated")
     private LocalDateTime dateOfCreated;
+    @Column(name = "emailUser")
+    private String emailUser;
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private User user;
 

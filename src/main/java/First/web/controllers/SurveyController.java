@@ -25,8 +25,9 @@ public class SurveyController {
     public  String createSurvey(@RequestParam("category") String category,
                                 @RequestParam("price") Long price,
                                 @RequestParam("nameUser") String nameUser,
-                                @RequestParam("phoneUser") String phoneUser, Principal principal){
-        surveyService.saveSurvey(category, price, phoneUser, nameUser, principal);
+                                @RequestParam("phoneUser") String phoneUser,
+                                @RequestParam("emailUser") String emailUser,Principal principal){
+        surveyService.saveSurvey(category, price, phoneUser, nameUser,emailUser, principal);
         return "redirect:/survey/thanks";
     }
 

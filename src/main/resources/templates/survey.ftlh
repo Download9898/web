@@ -53,11 +53,24 @@
                 <p style="text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 1.5rem;">Оставьте контакты — мы свяжемся с вами</p>
                 <div class="form-group">
                     <input type="text" name="nameUser" class="form-control" placeholder="Имя" required
+                           minlength="2" maxlength="50"
+                           pattern="[А-Яа-яЁёA-Za-z\s]+"
+                           title="Имя должно содержать только буквы"
                            style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="phoneUser" class="form-control" placeholder="Телефон" required
+                    <input type="tel" name="phoneUser" class="form-control" placeholder="+79991234567" required
+                           pattern="(\+7|8)[0-9]{10}"
+                           title="Введите номер в формате +79991234567 или 89991234567"
                            style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                    <small id="phoneError" style="color: red; display: none;">Формат: +79991234567 или 89991234567</small>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="emailUser" class="form-control" placeholder="example@mail.ru" required
+                           pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                           title="Введите корректный email"
+                           style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                    <small id="emailError" style="color: red; display: none;">Введите корректный email например: example@mail.ru</small>
                 </div>
                 <button type="submit" style="width: 100%; background: linear-gradient(90deg, #e85d04, #d62828); border: none; color: #fff; font-weight: 500; padding: 10px; border-radius: 6px; cursor: pointer; margin-bottom: 10px;">Записаться</button>
                 <button type="button" onclick="nextStep(2)" style="width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); padding: 8px; border-radius: 6px; cursor: pointer;">← Назад</button>
@@ -91,5 +104,55 @@
             el.style.background = 'rgba(255,255,255,0.1)';
             document.getElementById(inputId + 'Input').value = value;
         }
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            const phone = document.querySelector('[name="phoneUser"]');
+            const name = document.querySelector('[name="nameUser"]');
+            const email = document.querySelector('[name="emailUser"]');
+
+            if (!name.validity.valid) {
+                name.style.border = '1px solid red';
+                document.getElementById('nameError').style.display = 'block';
+                e.preventDefault();
+            } else {
+                name.style.border = '1px solid rgba(255,255,255,0.2)';
+                document.getElementById('nameError').style.display = 'none';
+            }
+
+            if (!phone.validity.valid) {
+                phone.style.border = '1px solid red';
+                document.getElementById('phoneError').style.display = 'block';
+                e.preventDefault();
+            } else {
+                phone.style.border = '1px solid rgba(255,255,255,0.2)';
+                document.getElementById('phoneError').style.display = 'none';
+            }
+
+            if (!email.validity.valid) {
+                email.style.border = '1px solid red';
+                document.getElementById('emailError').style.display = 'block';
+                e.preventDefault();
+            } else {
+                email.style.border = '1px solid rgba(255,255,255,0.2)';
+                document.getElementById('emailError').style.display = 'none';
+            }
+        });
+
+        ['[name="phoneUser"]', '[name="nameUser"]', '[name="emailUser"]'].forEach(function(selector) {
+            document.querySelector(selector).addEventListener('input', function() {
+                const errorMap = {
+                    'phoneUser': 'phoneError',
+                    'nameUser': 'nameError',
+                    'emailUser': 'emailError'
+                };
+                const error = document.getElementById(errorMap[this.name]);
+                if (!this.validity.valid) {
+                    this.style.border = '1px solid red';
+                    error.style.display = 'block';
+                } else {
+                    this.style.border = '1px solid rgba(255,255,255,0.2)';
+                    error.style.display = 'none';
+                }
+            });
+        });
     </script>
 </@t.template>
